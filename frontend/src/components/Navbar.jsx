@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Navbar as BSNavbar, Nav, Container } from 'react-bootstrap';
-import { Church, Calendar, BookOpen, Users, Heart, DollarSign, Info } from 'lucide-react';
+import { Navbar as BSNavbar, Nav, Container, Dropdown } from 'react-bootstrap';
+import { Church, Calendar, BookOpen, Users, Heart, DollarSign, Info, User, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 function Navbar() {
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Home', icon: Church },
@@ -19,6 +21,11 @@ function Navbar() {
 
   const handleNavClick = () => {
     setExpanded(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleNavClick();
   };
 
   return (
@@ -46,7 +53,7 @@ function Navbar() {
         
         <BSNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BSNavbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav className="ms-auto align-items-lg-center">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -63,6 +70,35 @@ function Navbar() {
                 </Nav.Link>
               );
             })}
+            
+            {isAuthenticated && user ? (
+              <Dropdown align="end" className="ms-lg-3">
+                <Dropdown.Toggle 
+                  variant="light" 
+                  id="user-dropdown"
+                  className="d-flex align-items-center gap-2"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    color: '#ffffff'
+                  }}
+                >
+                  <User size={18} />
+                  <span>{user.name || user.email}</span>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item disabled>
+                    <small className="text-muted">{user.email}</small>
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout}>
+                    <LogOut size={16} className="me-2" />
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : null}
           </Nav>
         </BSNavbar.Collapse>
       </Container>

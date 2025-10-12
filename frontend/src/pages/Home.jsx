@@ -1,17 +1,32 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Alert, Badge, Modal, Form } from 'react-bootstrap';
-import { Calendar, BookOpen, Users, Heart, ArrowRight, LogIn, UserPlus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Container, Row, Col, Card, Button, Alert, Badge, Modal, Form, Toast, ToastContainer } from 'react-bootstrap';
+import { Calendar, BookOpen, Users, Heart, ArrowRight, LogIn, UserPlus, CheckCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { getUpcomingEvents, getSermons, getActiveAnnouncements } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import './Home.css';
 
 function Home() {
+  const navigate = useNavigate();
+  const { login, signup, isAuthenticated } = useAuth();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [recentSermons, setRecentSermons] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [signupData, setSignupData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -33,6 +48,83 @@ function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    setIsSubmitting(true);
+
+    const result = await login(loginData);
+    
+    if (result.success) {
+      setShowLoginModal(false);
+      setSuccessMessage('Login successful! Welcome back.');
+      setShowSuccessToast(true);
+      setLoginData({ email: '', password: '' });
+      
+      // Redirect after a short delay
+      setTimeout(() => {
+        navigate('/events');
+      }, 1500);
+    } else {
+      setErrors({ login: result.error });
+    }
+    
+    setIsSubmitting(false);
+  };
+
+  const handleSignupSubmit = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
+    // Validation
+    const newErrors = {};
+    if (!signupData.name) newErrors.name = 'Name is required';
+    if (!signupData.email) newErrors.email = 'Email is required';
+    if (!signupData.password) newErrors.password = 'Password is required';
+    if (signupData.password !== signupData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    if (signupData.password && signupData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const result = await signup({
+      name: signupData.name,
+      email: signupData.email,
+      phone: signupData.phone,
+      password: signupData.password
+    });
+    
+    if (result.success) {
+      setShowSignupModal(false);
+      setSuccessMessage('Account created successfully! Welcome to Hallelujah Church.');
+      setShowSuccessToast(true);
+      setSignupData({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: ''
+      });
+      
+      // Redirect after a short delay
+      setTimeout(() => {
+        navigate('/events');
+      }, 2000);
+    } else {
+      setErrors({ signup: result.error });
+    }
+    
+    setIsSubmitting(false);
   };
 
   return (
@@ -75,43 +167,45 @@ function Home() {
             A place where faith comes alive and community thrives
           </p>
           
-          {/* Login/Signup Buttons */}
-          <div className="d-flex gap-3 justify-content-center mb-5" style={{
-            animation: 'fadeInUp 1s ease-out 0.4s both'
-          }}>
-            <Button 
-              size="lg"
-              onClick={() => setShowLoginModal(true)}
-              className="d-flex align-items-center gap-2 btn-hero"
-              style={{
-                backgroundColor: '#ffffff',
-                color: '#6366f1',
-                border: 'none',
-                fontWeight: '600',
-                padding: '0.75rem 2rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-              }}
-            >
-              <LogIn size={20} />
-              Login
-            </Button>
-            <Button 
-              size="lg"
-              onClick={() => setShowSignupModal(true)}
-              className="d-flex align-items-center gap-2 btn-hero-outline"
-              style={{
-                backgroundColor: 'transparent',
-                color: '#ffffff',
-                border: '2px solid #ffffff',
-                fontWeight: '600',
-                padding: '0.75rem 2rem',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-              }}
-            >
-              <UserPlus size={20} />
-              Sign Up
-            </Button>
-          </div>
+          {/* Login/Signup Buttons - Only show if not authenticated */}
+          {!isAuthenticated && (
+            <div className="d-flex gap-3 justify-content-center mb-5" style={{
+              animation: 'fadeInUp 1s ease-out 0.4s both'
+            }}>
+              <Button 
+                size="lg"
+                onClick={() => setShowLoginModal(true)}
+                className="d-flex align-items-center gap-2 btn-hero"
+                style={{
+                  backgroundColor: '#ffffff',
+                  color: '#6366f1',
+                  border: 'none',
+                  fontWeight: '600',
+                  padding: '0.75rem 2rem',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                }}
+              >
+                <LogIn size={20} />
+                Login
+              </Button>
+              <Button 
+                size="lg"
+                onClick={() => setShowSignupModal(true)}
+                className="d-flex align-items-center gap-2 btn-hero-outline"
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#ffffff',
+                  border: '2px solid #ffffff',
+                  fontWeight: '600',
+                  padding: '0.75rem 2rem',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                }}
+              >
+                <UserPlus size={20} />
+                Sign Up
+              </Button>
+            </div>
+          )}
 
           <Row className="mt-4" style={{
             animation: 'fadeInUp 1s ease-out 0.6s both'
@@ -316,20 +410,39 @@ function Home() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          {errors.login && (
+            <Alert variant="danger" dismissible onClose={() => setErrors({})}>
+              {errors.login}
+            </Alert>
+          )}
+          <Form onSubmit={handleLoginSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control 
+                type="email" 
+                placeholder="Enter email"
+                value={loginData.email}
+                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Control 
+                type="password" 
+                placeholder="Password"
+                value={loginData.password}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                required
+              />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Check type="checkbox" label="Remember me" />
-            </Form.Group>
-            <Button variant="primary" type="submit" className="w-100">
-              Login
+            <Button 
+              variant="primary" 
+              type="submit" 
+              className="w-100"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
             </Button>
           </Form>
           <div className="text-center mt-3">
@@ -341,6 +454,7 @@ function Home() {
                 onClick={() => {
                   setShowLoginModal(false);
                   setShowSignupModal(true);
+                  setErrors({});
                 }}
               >
                 Sign up here
@@ -359,35 +473,84 @@ function Home() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          {errors.signup && (
+            <Alert variant="danger" dismissible onClose={() => setErrors({})}>
+              {errors.signup}
+            </Alert>
+          )}
+          <Form onSubmit={handleSignupSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Full Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter your full name" />
+              <Form.Control 
+                type="text" 
+                placeholder="Enter your full name"
+                value={signupData.name}
+                onChange={(e) => setSignupData({ ...signupData, name: e.target.value })}
+                isInvalid={!!errors.name}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.name}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Control 
+                type="email" 
+                placeholder="Enter email"
+                value={signupData.email}
+                onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                isInvalid={!!errors.email}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.email}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Phone Number</Form.Label>
-              <Form.Control type="tel" placeholder="Enter phone number" />
+              <Form.Label>Phone Number (Optional)</Form.Label>
+              <Form.Control 
+                type="tel" 
+                placeholder="Enter phone number"
+                value={signupData.phone}
+                onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Create password" />
+              <Form.Control 
+                type="password" 
+                placeholder="Create password (min 6 characters)"
+                value={signupData.password}
+                onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                isInvalid={!!errors.password}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.password}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" placeholder="Confirm password" />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Check 
-                type="checkbox" 
-                label="I agree to the terms and conditions" 
+              <Form.Control 
+                type="password" 
+                placeholder="Confirm password"
+                value={signupData.confirmPassword}
+                onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
+                isInvalid={!!errors.confirmPassword}
+                required
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.confirmPassword}
+              </Form.Control.Feedback>
             </Form.Group>
-            <Button variant="primary" type="submit" className="w-100">
-              Sign Up
+            <Button 
+              variant="primary" 
+              type="submit" 
+              className="w-100"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating Account...' : 'Sign Up'}
             </Button>
           </Form>
           <div className="text-center mt-3">
@@ -399,6 +562,7 @@ function Home() {
                 onClick={() => {
                   setShowSignupModal(false);
                   setShowLoginModal(true);
+                  setErrors({});
                 }}
               >
                 Login here
@@ -407,6 +571,25 @@ function Home() {
           </div>
         </Modal.Body>
       </Modal>
+
+      {/* Success Toast */}
+      <ToastContainer position="top-end" className="p-3" style={{ zIndex: 9999 }}>
+        <Toast 
+          show={showSuccessToast} 
+          onClose={() => setShowSuccessToast(false)} 
+          delay={3000} 
+          autohide
+          bg="success"
+        >
+          <Toast.Header>
+            <CheckCircle size={20} className="text-success me-2" />
+            <strong className="me-auto">Success</strong>
+          </Toast.Header>
+          <Toast.Body className="text-white">
+            {successMessage}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 }

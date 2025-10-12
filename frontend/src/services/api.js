@@ -1,12 +1,21 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+// Add auth token to requests if available
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 // Members
@@ -51,5 +60,11 @@ export const updatePrayerRequest = (id, data) => api.put(`/prayer-requests/${id}
 // Announcements
 export const getAnnouncements = () => api.get('/announcements/');
 export const getActiveAnnouncements = () => api.get('/announcements/active/');
+
+// Authentication
+export const login = (credentials) => api.post('/auth/login/', credentials);
+export const signup = (userData) => api.post('/auth/signup/', userData);
+export const logout = () => api.post('/auth/logout/');
+export const getCurrentUser = () => api.get('/auth/user/');
 
 export default api;
