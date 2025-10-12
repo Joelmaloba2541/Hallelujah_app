@@ -1,0 +1,275 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                  HALLELUJAH CHURCH MANAGEMENT SYSTEM                       ║
+║                         Project Structure                                  ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Hallelujah_app/
+│
+├── 📄 Documentation Files
+│   ├── README.md                    # Main documentation
+│   ├── SETUP_GUIDE.md              # Quick setup instructions
+│   ├── PROJECT_SUMMARY.md          # Detailed project overview
+│   ├── QUICK_REFERENCE.md          # Quick reference card
+│   ├── COMPLETION_REPORT.md        # Project completion report
+│   ├── PROJECT_STRUCTURE.txt       # This file
+│   └── .gitignore                  # Git ignore rules
+│
+├── 🚀 Startup Scripts
+│   ├── start_all.sh               # Start both backend & frontend
+│   ├── start_backend.sh           # Start Django server only
+│   ├── start_frontend.sh          # Start React dev server only
+│   └── verify_setup.sh            # Verify installation
+│
+├── 🔧 Backend Configuration
+│   ├── manage.py                  # Django management script
+│   ├── requirements.txt           # Python dependencies
+│   ├── db.sqlite3                 # SQLite database (auto-created)
+│   │
+│   ├── backend/                   # Django project settings
+│   │   ├── __init__.py
+│   │   ├── settings.py           # Django configuration
+│   │   ├── urls.py               # Main URL routing
+│   │   ├── wsgi.py               # WSGI configuration
+│   │   └── asgi.py               # ASGI configuration
+│   │
+│   └── church/                    # Main Django app
+│       ├── __init__.py
+│       ├── models.py             # Database models (7 models)
+│       ├── views.py              # API views (ViewSets)
+│       ├── serializers.py        # DRF serializers
+│       ├── admin.py              # Admin panel config
+│       ├── urls.py               # App URL routing
+│       ├── apps.py               # App configuration
+│       ├── tests.py              # Test cases
+│       │
+│       ├── migrations/           # Database migrations
+│       │   ├── __init__.py
+│       │   └── 0001_initial.py  # Initial migration
+│       │
+│       └── management/           # Custom commands
+│           ├── __init__.py
+│           └── commands/
+│               ├── __init__.py
+│               └── init_church.py  # Database initialization
+│
+├── 💻 Frontend Application
+│   └── frontend/
+│       ├── package.json          # Node dependencies
+│       ├── vite.config.js        # Vite configuration
+│       ├── index.html            # HTML entry point
+│       ├── .eslintrc.cjs         # ESLint config
+│       │
+│       ├── public/               # Static assets
+│       │   └── vite.svg
+│       │
+│       └── src/                  # React source code
+│           ├── main.jsx          # App entry point
+│           ├── App.jsx           # Main app component
+│           ├── App.css           # App styles
+│           ├── index.css         # Global styles
+│           │
+│           ├── components/       # Reusable components
+│           │   ├── Navbar.jsx   # Navigation bar
+│           │   └── Navbar.css   # Navbar styles
+│           │
+│           ├── pages/            # Page components
+│           │   ├── Home.jsx     # Home page
+│           │   ├── Home.css     # Home styles
+│           │   ├── Events.jsx   # Events page
+│           │   ├── Events.css   # Events styles
+│           │   ├── Sermons.jsx  # Sermons page
+│           │   ├── Sermons.css  # Sermons styles
+│           │   ├── Ministries.jsx    # Ministries page
+│           │   ├── Donations.jsx     # Donations page
+│           │   ├── PrayerRequests.jsx # Prayer page
+│           │   └── About.jsx         # About page
+│           │
+│           ├── services/         # API services
+│           │   └── api.js       # Axios API client
+│           │
+│           └── assets/           # Images, icons, etc.
+│               └── react.svg
+│
+└── 🐍 Python Virtual Environment
+    └── venv/                     # Python packages (auto-created)
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                           DATABASE MODELS                                  ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+1. Member
+   ├── user (OneToOne → User)
+   ├── first_name, last_name
+   ├── email, phone, address
+   ├── date_of_birth
+   ├── membership_status (active/inactive/visitor)
+   ├── date_joined
+   └── photo
+
+2. Event
+   ├── title, description
+   ├── event_type (service/prayer/bible_study/youth/conference/outreach/other)
+   ├── start_date, end_date
+   ├── location
+   ├── image
+   └── created_at, updated_at
+
+3. Sermon
+   ├── title, preacher
+   ├── description
+   ├── scripture_reference
+   ├── date_preached
+   ├── video_url
+   ├── audio_file
+   ├── thumbnail
+   └── created_at
+
+4. Donation
+   ├── member (ForeignKey → Member)
+   ├── donor_name
+   ├── amount
+   ├── donation_type (tithe/offering/building_fund/missions/special/other)
+   ├── payment_method (cash/mpesa/bank/card)
+   ├── transaction_reference
+   ├── date
+   └── notes
+
+5. Ministry
+   ├── name, description
+   ├── leader (ForeignKey → Member)
+   ├── members (ManyToMany → Member)
+   ├── meeting_day, meeting_time
+   ├── image
+   └── created_at
+
+6. PrayerRequest
+   ├── member (ForeignKey → Member)
+   ├── name, email
+   ├── request
+   ├── status (pending/praying/answered)
+   └── created_at, updated_at
+
+7. Announcement
+   ├── title, content
+   ├── priority
+   ├── is_active
+   ├── created_at
+   └── expires_at
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                            API ENDPOINTS                                   ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Base URL: http://localhost:8000/api/
+
+Members:
+  GET    /members/              → List all members
+  POST   /members/              → Create member
+  GET    /members/{id}/         → Get member details
+  PUT    /members/{id}/         → Update member
+  DELETE /members/{id}/         → Delete member
+
+Events:
+  GET    /events/               → List all events
+  GET    /events/upcoming/      → Get upcoming events
+  POST   /events/               → Create event
+  PUT    /events/{id}/          → Update event
+  DELETE /events/{id}/          → Delete event
+
+Sermons:
+  GET    /sermons/              → List all sermons
+  POST   /sermons/              → Create sermon
+  PUT    /sermons/{id}/         → Update sermon
+  DELETE /sermons/{id}/         → Delete sermon
+
+Donations:
+  GET    /donations/            → List donations
+  GET    /donations/statistics/ → Get donation stats
+  POST   /donations/            → Create donation
+
+Ministries:
+  GET    /ministries/           → List ministries
+  POST   /ministries/           → Create ministry
+  PUT    /ministries/{id}/      → Update ministry
+  DELETE /ministries/{id}/      → Delete ministry
+
+Prayer Requests:
+  GET    /prayer-requests/      → List prayer requests
+  POST   /prayer-requests/      → Submit request
+  PUT    /prayer-requests/{id}/ → Update request
+
+Announcements:
+  GET    /announcements/        → List announcements
+  GET    /announcements/active/ → Get active announcements
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          FRONTEND ROUTES                                   ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+/                    → Home Page
+/events              → Events Page
+/sermons             → Sermons Page
+/ministries          → Ministries Page
+/donations           → Donations Page
+/prayer-requests     → Prayer Requests Page
+/about               → About Page
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        TECHNOLOGY STACK                                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Backend:
+  • Django 5.2.7
+  • Django REST Framework 3.16.1
+  • django-cors-headers 4.9.0
+  • Pillow 11.3.0
+  • SQLite Database
+
+Frontend:
+  • React 19.1.1
+  • React Router DOM 6.22.0
+  • Bootstrap 5.3.2
+  • React Bootstrap 2.10.0
+  • Axios 1.6.7
+  • Lucide React 0.460.0
+  • Vite 7.1.7
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         QUICK START                                        ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+1. Start the application:
+   $ ./start_all.sh
+
+2. Access the application:
+   • Frontend: http://localhost:5173
+   • Admin Panel: http://localhost:8000/admin
+   • API: http://localhost:8000/api
+
+3. Login credentials:
+   • Username: admin
+   • Password: admin
+   • Email: admin@gmail.com
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      DUMMY DATA INCLUDED                                   ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+✓ 5 Members (John Kamau, Mary Wanjiku, Peter Ochieng, Grace Akinyi, David Mwangi)
+✓ 4 Ministries (Worship Team, Youth Ministry, Children Ministry, Intercessory Prayer)
+✓ 5 Events (Sunday Service, Bible Study, Youth Night, Prayer Meeting, Outreach)
+✓ 4 Sermons (Walking in Faith, Power of Prayer, Love One Another, Great Commission)
+✓ 5 Donations (Total: KSh 35,000)
+✓ 3 Prayer Requests
+✓ 3 Announcements
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    Built for Hallelujah Church 🙏                         ║
+╚════════════════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,405 @@
+/* Hero Section Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Hero Section Styles */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated Background Shapes */
+.hero-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 6s ease-in-out infinite;
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  right: -100px;
+  animation-delay: 0s;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  left: 10%;
+  animation-delay: 2s;
+}
+
+.shape-3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  left: -50px;
+  animation-delay: 4s;
+}
+
+/* Button Hover Effects */
+.btn-hero {
+  transition: all 0.3s ease !important;
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+  background-color: #f0f0f0 !important;
+}
+
+.btn-hero-outline {
+  transition: all 0.3s ease !important;
+}
+
+.btn-hero-outline:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Hero Stats Animation */
+.hero-stat {
+  transition: transform 0.3s ease;
+}
+
+.hero-stat:hover {
+  transform: scale(1.05);
+}
+
+/* Quick Link Cards */
+.quick-link-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.quick-link-card:hover .icon-bounce {
+  animation: iconBounce 0.6s ease-in-out;
+}
+
+.icon-bounce {
+  transition: all 0.3s ease;
+}
+
+.home {
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.hero-stats .stat h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-stats .stat p {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.announcements-section {
+  background-color: #fef3c7;
+  padding: 2rem 0;
+}
+
+.announcements-section h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--dark);
+}
+
+.announcements-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.announcement-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--warning);
+}
+
+.announcement-card h3 {
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.announcement-card p {
+  color: var(--gray);
+}
+
+.quick-links {
+  padding: 3rem 0;
+  background-color: white;
+}
+
+.quick-link-card {
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  border: 2px solid var(--light-gray);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quick-link-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+
+.quick-link-card svg {
+  color: var(--primary);
+}
+
+.quick-link-card h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.quick-link-card p {
+  color: var(--gray);
+  margin: 0;
+}
+
+.link-arrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: auto;
+}
+
+.events-preview,
+.sermons-preview {
+  padding: 3rem 0;
+}
+
+.events-preview {
+  background-color: var(--light-gray);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  color: var(--dark);
+}
+
+.event-card,
+.sermon-card {
+  position: relative;
+}
+
+.event-type {
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+}
+
+.event-card h3,
+.sermon-card h3 {
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.event-date,
+.sermon-date {
+  color: var(--gray);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-location {
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.sermon-preacher {
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sermon-scripture {
+  color: var(--secondary);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.event-description,
+.sermon-description {
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .hero-section {
+    min-height: 450px !important;
+    padding: 2rem 0;
+  }
+
+  .btn-hero,
+  .btn-hero-outline {
+    font-size: 0.95rem;
+    padding: 0.65rem 1.5rem !important;
+  }
+
+  .shape-1 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .shape-2 {
+    width: 150px;
+    height: 150px;
+  }
+
+  .shape-3 {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Ensure text is always visible */
+.hero-section * {
+  color: #ffffff !important;
+}
+
+.hero-section h1,
+.hero-section h3,
+.hero-section p {
+  color: #ffffff !important;
+}

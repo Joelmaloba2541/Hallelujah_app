@@ -1,0 +1,22 @@
+footer {
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .hover-link {
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+footer .hover-link:hover {
+  color: #fff !important;
+  transform: translateX(3px);
+}
+
+footer a[aria-label] {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+footer a[aria-label]:hover {
+  transform: scale(1.1);
+  color: #fff !important;
+}
