@@ -4,10 +4,16 @@
 - GitHub account
 - Render account (free tier available at https://render.com)
 
+## Repository Structure
+✅ **Clean repository structure** - All files are at the root level (no nested directories)
+✅ **GitHub URL:** https://github.com/Joelmaloba2541/Hallelujah_app.git
+
 ## Deployment Steps
 
-### 1. Push to GitHub
-The code is ready to be pushed to: https://github.com/Joelmaloba2541/Hallelujah_app.git
+### 1. Repository Status
+✅ Code successfully pushed to GitHub with clean structure
+✅ No nested directories (software/Hallelujah_app removed)
+✅ All files at root level for easy deployment
 
 ### 2. Create Web Service on Render
 
@@ -34,7 +40,23 @@ ALLOWED_HOSTS=your-app-name.onrender.com
 PYTHON_VERSION=3.11.6
 ```
 
-### 3. Create PostgreSQL Database (Optional but Recommended)
+### 3. Verify Repository Structure
+Before deploying, verify the repository has the correct structure:
+```
+Hallelujah_app/
+├── backend/          # Django backend
+├── church/           # Church app
+├── frontend/         # React frontend
+├── manage.py         # Django management
+├── requirements.txt  # Python dependencies
+├── build.sh          # Build script
+├── runtime.txt       # Python version
+└── README.md         # Documentation
+```
+
+All files should be at the root level (no `software/` prefix).
+
+### 4. Create PostgreSQL Database (Optional but Recommended)
 
 1. In Render dashboard, click "New +" and select "PostgreSQL"
 2. Configure:
@@ -50,7 +72,7 @@ PYTHON_VERSION=3.11.6
    DATABASE_URL=<paste-internal-database-url-here>
    ```
 
-### 4. Deploy
+### 5. Deploy
 
 1. Click "Create Web Service"
 2. Render will automatically:
@@ -58,7 +80,7 @@ PYTHON_VERSION=3.11.6
    - Run `build.sh` (migrations, collectstatic, init data)
    - Start the application with gunicorn
 
-### 5. Access Your App
+### 6. Access Your App
 
 - **Backend API:** `https://your-app-name.onrender.com/api/`
 - **Admin Panel:** `https://your-app-name.onrender.com/admin/`
