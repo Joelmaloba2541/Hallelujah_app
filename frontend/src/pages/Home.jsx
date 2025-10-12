@@ -177,22 +177,25 @@ function Home() {
                 onClick={() => setShowLoginModal(true)}
                 className="d-flex align-items-center gap-2"
                 style={{
-                  backgroundColor: '#ffffff',
-                  color: '#6366f1',
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                  color: '#ffffff',
                   border: '2px solid #ffffff',
                   fontWeight: '700',
                   padding: '0.85rem 2.5rem',
                   fontSize: '1.1rem',
                   boxShadow: '0 6px 20px rgba(0,0,0,0.3)',
+                  backdropFilter: 'blur(10px)',
                   transition: 'all 0.3s ease',
                   transform: 'scale(1)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.25)';
                   e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.4)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
                   e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
                 }}
               >
