@@ -99,7 +99,7 @@ function About() {
                   </Row>
                   <h5>Location</h5>
                   <p className="text-muted mb-0">
-                    Mwamba, Kakamega<br />
+                    Mwamba, Kakamega, Kenya<br />
                     Contact: info@hallelujahchurch.org
                   </p>
                 </div>

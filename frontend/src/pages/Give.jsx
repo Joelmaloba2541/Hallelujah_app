@@ -136,7 +136,7 @@ function Give() {
                           Give during service or visit the church office:
                         </p>
                         <div className="bg-light p-3 rounded">
-                          <p className="mb-1"><strong>Location:</strong> Mwamba, Kakamega</p>
+                          <p className="mb-1"><strong>Location:</strong> Mwamba, Kakamega, Kenya</p>
                           <p className="mb-1"><strong>Service Times:</strong></p>
                           <p className="mb-1 ms-3">Sunday: 9:00 AM & 11:00 AM</p>
                           <p className="mb-0 ms-3">Wednesday: 6:00 PM</p>
